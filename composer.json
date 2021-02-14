@@ -1,6 +1,6 @@
 {
   "name": "yokai/doctrine-value-object",
-  "description": "Doctrine ORM Value Objects simplified",
+  "description": "Value Objects for Doctrine ORM simplified",
   "keywords": ["doctrine", "orm", "value object"],
   "license": "MIT",
   "authors": [
