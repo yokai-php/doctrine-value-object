@@ -41,6 +41,10 @@ class Kernel extends BaseKernel
 
 ## Value Object Types
 
+Value objects are wrappers around existing doctrine types.
+
+Let's see what wrappers exist and give you an example for each.
+
 ### String
 
 Imagine you have an application that stores phone numbers in database.
@@ -49,43 +53,8 @@ You will often have to determine the country from which the number is originated
 You can centralize this logic in a `PhoneNumber` **string value object**.
 The object will be **stored as a string** in the database but **hydrated back to this object** by Doctrine.
 
-```php
-use Yokai\DoctrineValueObject\StringValueObject;
+See [PhoneNumber code](tests/PhoneNumber.php) in tests.
 
-class PhoneNumber implements StringValueObject
-{
-    private string $number;
-
-    public function __construct(string $number)
-    {
-        if (\strpos($number, '+') !== 0) {
-            $number = '+33' . \substr($number, 1);
-        }
-
-        $this->number = $number;
-    }
-
-    public static function fromValue(string $value): self
-    {
-        return new self($value);
-    }
-
-    public function toValue(): string
-    {
-        return $this->number;
-    }
-
-    public function getNumber(): string
-    {
-        return $this->number;
-    }
-
-    public function getCountry(): string
-    {
-        return \substr($this->number, 1, 2);
-    }
-}
-```
 
 ### Collection
 
@@ -94,109 +63,29 @@ You can centralize this type hinting in a `PhoneNumbers` **collection value obje
 
 The object will be **stored as a json** in the database but **hydrated back to this object** by Doctrine.
 
-```php
-use Yokai\DoctrineValueObject\CollectionValueObject;
+See [PhoneNumbers code](tests/PhoneNumbers.php) in tests.
 
-class PhoneNumbers implements CollectionValueObject, \Countable, \IteratorAggregate
-{
-    private array $numbers;
 
-    /**
-     * @param PhoneNumber[] $numbers
-     */
-    public function __construct(array $numbers)
-    {
-        $this->numbers = $numbers;
-    }
+### DateTime
 
-    public static function fromValue(array $value): self
-    {
-        return new static(
-            \array_map([PhoneNumber::class, 'fromValue'], $value)
-        );
-    }
+Imagine you have an application that stores users birthdate.
+You will often have to determine the age of the user, and put rules on this value.
 
-    public function toValue(): array
-    {
-        return $this->numbers;
-    }
+You can centralize this logic in a `Birthdate` **datetime value object**.
+The object will be **stored as datetime immutable** in the database but **hydrated back to this object** by Doctrine.
 
-    public function count(): int
-    {
-        return \count($this->numbers);
-    }
-    
-    /**
-     * @return \ArrayIterator<PhoneNumber>
-     */
-    public function getIterator(): \ArrayIterator
-    {
-        return new \ArrayIterator($this->numbers);
-    }
+See [Birthdate code](tests/Birthdate.php) in tests.
 
-    /**
-     * @return PhoneNumber[]
-     */
-    public function getNumbers(): array
-    {
-        return $this->numbers;
-    }
-}
-```
 
 ### Integer
 
-Imagine you have an application that birth year of users.
-You will often have to determine the age of the user, and put rules on this value.
+Imagine you have an application that stores user status.
+You will often have to put rules on this value.
 
-You can centralize this logic in a `BirthYear` **integer value object**.
+You can centralize this logic in a `Status` **integer value object**.
 The object will be **stored as a integer** in the database but **hydrated back to this object** by Doctrine.
 
-```php
-use Yokai\DoctrineValueObject\IntegerValueObject;
-
-class BirthYear implements IntegerValueObject
-{
-    private int $year;
-
-    /**
-     * @param int $year
-     */
-    public function __construct(int $year)
-    {
-        $this->year = $year;
-    }
-
-    public static function fromValue(int $value): self
-    {
-        return new static($value);
-    }
-
-    public function toValue(): int
-    {
-        return $this->year;
-    }
-
-    public function getYear(): int
-    {
-        return $this->year;
-    }
-
-    public function getAge(): int
-    {
-        return ((int)\date('Y')) - $this->year;
-    }
-
-    public function isAllowedToDrinkBeer(bool $parentsWillNotKnow): int
-    {
-        if ($parentsWillNotKnow) {
-            return true; // but be careful :)
-        }
-
-        return $this->getAge() >= 18;
-    }
-}
-```
+See [Status code](tests/Status.php) in tests.
 
 
 ## Contribution
