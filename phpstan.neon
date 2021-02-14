@@ -1,0 +1,10 @@
+parameters:
+  level: max
+  checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false
+  paths:
+    - src/
+
+  ignoreErrors:
+    # callable with array syntax is not inferred
+    - '#.*function call_user_func expects callable.*#'
