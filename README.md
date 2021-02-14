@@ -11,10 +11,18 @@ This library offer you an easy way to handle **value objects** in a **Doctrine O
 
 It will save you the creation of Doctrine types for every different value object types you have.
 
-**If you are looking for Value Objects with multiple properties to store : please use Doctrine Embeddables.**
+**If you are looking for Value Objects with multiple properties to store:
+please use [Doctrine Embeddables](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/tutorials/embeddables.html).**
 
 
-## Usage
+## Installation
+
+```bash
+composer require yokai/doctrine-value-object
+```
+
+
+## Setup
 
 You will have to register your value object types to the Doctrine type system.
 
@@ -26,7 +34,7 @@ use Yokai\DoctrineValueObject\Doctrine\Types;
     ->register(Type::getTypeRegistry());
 ```
 
-If you are using Symfony, you can register your value object types in the kernel construction.
+If you are using **Symfony**, you can register your value object types in the kernel construction.
 
 ```php
 use Doctrine\DBAL\Types\Type;
@@ -45,6 +53,28 @@ class Kernel extends BaseKernel
     }
 }
 ```
+
+
+## Usage
+
+After you completed setup you will be able to use your value object types type in any of your entities:
+
+```php
+<?php
+
+namespace Yokai\DoctrineValueObject\Tests;
+
+use Doctrine\ORM\Mapping as ORM;
+
+final class Entity
+{
+    /**
+     * @ORM\Column(type="doctrine_type_name")
+     */
+    public MyValueObject $status;
+}
+```
+
 
 ## Value Object Types
 
