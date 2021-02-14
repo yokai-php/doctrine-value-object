@@ -1,5 +1,12 @@
 # Doctrine Value Objects simplified
 
+[![Tests](https://img.shields.io/github/workflow/status/yokai-php/doctrine-value-object/Tests?style=flat-square&label=tests)](https://github.com/yokai-php/doctrine-value-object/actions)
+[![Coverage](https://img.shields.io/codecov/c/github/yokai-php/doctrine-value-object?style=flat-square)](https://codecov.io/gh/yokai-php/doctrine-value-object)
+[![Contributors](https://img.shields.io/github/contributors/yokai-php/doctrine-value-object?style=flat-square)](https://github.com/yokai-php/doctrine-value-object/graphs/contributors)
+
+[![Latest Stable Version](https://img.shields.io/packagist/v/yokai/doctrine-value-object?style=flat-square)](https://packagist.org/packages/yokai/doctrine-value-object)
+[![Downloads Monthly](https://img.shields.io/packagist/dm/yokai/doctrine-value-object?style=flat-square)](https://packagist.org/packages/yokai/doctrine-value-object)
+
 This library offer you an easy way to handle **value objects** in a **Doctrine ORM** application.
 
 It will save you the creation of Doctrine types for every different value object types you have.
