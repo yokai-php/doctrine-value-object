@@ -114,10 +114,10 @@ See [Status code](tests/Status.php) in tests.
 
 ### Object
 
-**If you are looking for value objects with multiple properties each stored in a table column:
+:warning: **If you are looking for value objects with multiple properties each stored in a table column:
 please use [Doctrine Embeddables](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/tutorials/embeddables.html).**
 
-**If you are looking for polymorphic value objects stored as JSON:
+:warning: **If you are looking for polymorphic value objects stored as JSON:
 please use [dunglas/doctrine-json-odm](https://github.com/dunglas/doctrine-json-odm).**
 
 Imagine you have an application that stores user notifications preferences.
