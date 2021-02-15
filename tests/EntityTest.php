@@ -19,6 +19,7 @@ final class EntityTest extends TestCase
         'birthdate' => Birthdate::class,
         'phone_number' => PhoneNumber::class,
         'phone_numbers' => PhoneNumbers::class,
+        'notifications' => Notifications::class,
     ];
 
     public function testUserWithNoValues(): void
@@ -42,6 +43,7 @@ final class EntityTest extends TestCase
         self::assertNull($row['birthdate']);
         self::assertNull($row['contactPhoneNumber']);
         self::assertNull($row['phoneNumbers']);
+        self::assertNull($row['notifications']);
 
         // fetch entity from database
         /** @var User $user */
@@ -52,6 +54,7 @@ final class EntityTest extends TestCase
         self::assertNull($user->birthdate);
         self::assertNull($user->contactPhoneNumber);
         self::assertNull($user->phoneNumbers);
+        self::assertNull($user->notifications);
     }
 
     public function testUserWithAllValues(): void
@@ -66,6 +69,7 @@ final class EntityTest extends TestCase
         $user->phoneNumbers = new PhoneNumbers(
             [new PhoneNumber('+33455667788'), new PhoneNumber('+33233445566')]
         );
+        $user->notifications = new Notifications(true, false);
         // save changes
         $entityManager->persist($user);
         $entityManager->flush();
@@ -82,6 +86,7 @@ final class EntityTest extends TestCase
         self::assertSame('1986-11-17 00:00:00', $row['birthdate']);
         self::assertSame('+33677889900', $row['contactPhoneNumber']);
         self::assertSame('["+33455667788","+33233445566"]', $row['phoneNumbers']);
+        self::assertSame('{"email":true,"sms":false}', $row['notifications']);
 
         // fetch entity from database
         /** @var User $user */
@@ -95,6 +100,8 @@ final class EntityTest extends TestCase
             ['+33455667788', '+33233445566'],
             \array_map(fn(PhoneNumber $number) => $number->getNumber(), $user->phoneNumbers->getNumbers())
         );
+        self::assertTrue($user->notifications->isEmail());
+        self::assertFalse($user->notifications->isSms());
     }
 
     private function manager(): EntityManager

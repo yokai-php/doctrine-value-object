@@ -37,4 +37,9 @@ final class User
      * @ORM\Column(type="phone_numbers", nullable=true)
      */
     public ?PhoneNumbers $phoneNumbers = null;
+
+    /**
+     * @ORM\Column(type="notifications", nullable=true)
+     */
+    public ?Notifications $notifications = null;
 }

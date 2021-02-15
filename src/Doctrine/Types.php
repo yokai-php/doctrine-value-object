@@ -6,18 +6,15 @@ namespace Yokai\DoctrineValueObject\Doctrine;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\TypeRegistry;
-use Yokai\DoctrineValueObject\Doctrine\Types\CollectionValueObjectType;
-use Yokai\DoctrineValueObject\Doctrine\Types\DateTimeValueObjectType;
-use Yokai\DoctrineValueObject\Doctrine\Types\IntegerValueObjectType;
-use Yokai\DoctrineValueObject\Doctrine\Types\StringValueObjectType;
 
 final class Types
 {
     private const DOCTRINE_TYPES = [
-        CollectionValueObjectType::class,
-        DateTimeValueObjectType::class,
-        IntegerValueObjectType::class,
-        StringValueObjectType::class,
+        Types\CollectionValueObjectType::class,
+        Types\DateTimeValueObjectType::class,
+        Types\IntegerValueObjectType::class,
+        Types\ObjectValueObjectType::class,
+        Types\StringValueObjectType::class,
     ];
 
     private array $types;

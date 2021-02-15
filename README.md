@@ -11,9 +11,6 @@ This library offer you an easy way to handle **value objects** in a **Doctrine O
 
 It will save you the creation of Doctrine types for every different value object types you have.
 
-**If you are looking for Value Objects with multiple properties to store:
-please use [Doctrine Embeddables](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/tutorials/embeddables.html).**
-
 
 ## Installation
 
@@ -93,16 +90,6 @@ The object will be **stored as a string** in the database but **hydrated back to
 See [PhoneNumber code](tests/PhoneNumber.php) in tests.
 
 
-### Collection
-
-Imagine that in this application, you will sometimes have to store multiple phone numbers in a property.
-You can centralize this type hinting in a `PhoneNumbers` **collection value object**.
-
-The object will be **stored as a json** in the database but **hydrated back to this object** by Doctrine.
-
-See [PhoneNumbers code](tests/PhoneNumbers.php) in tests.
-
-
 ### DateTime
 
 Imagine you have an application that stores users birthdate.
@@ -123,6 +110,33 @@ You can centralize this logic in a `Status` **integer value object**.
 The object will be **stored as a integer** in the database but **hydrated back to this object** by Doctrine.
 
 See [Status code](tests/Status.php) in tests.
+
+
+### Object
+
+**If you are looking for value objects with multiple properties each stored in a table column:
+please use [Doctrine Embeddables](https://www.doctrine-project.org/projects/doctrine-orm/en/latest/tutorials/embeddables.html).**
+
+**If you are looking for polymorphic value objects stored as JSON:
+please use [dunglas/doctrine-json-odm](https://github.com/dunglas/doctrine-json-odm).**
+
+Imagine you have an application that stores user notifications preferences.
+There is multiple information you want to store, as a JSON object.
+
+You can centralize this logic in a `Notifications` **object value object**.
+The object will be **stored as a json object** in the database but **hydrated back to this object** by Doctrine.
+
+See [Notifications code](tests/Notifications.php) in tests.
+
+
+### Collection
+
+Imagine that you have an application that have to store multiple phone numbers in a property.
+You can centralize this type hinting in a `PhoneNumbers` **collection value object**.
+
+The object will be **stored as a json array** in the database but **hydrated back to this object** by Doctrine.
+
+See [PhoneNumbers code](tests/PhoneNumbers.php) in tests.
 
 
 ## Contribution
