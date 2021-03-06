@@ -5,7 +5,7 @@
 [![Contributors](https://img.shields.io/github/contributors/yokai-php/doctrine-value-object?style=flat-square)](https://github.com/yokai-php/doctrine-value-object/graphs/contributors)
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/yokai/doctrine-value-object?style=flat-square)](https://packagist.org/packages/yokai/doctrine-value-object)
-[![Downloads Monthly](https://img.shields.io/packagist/dm/yokai/doctrine-value-object?style=flat-square)](https://packagist.org/packages/yokai/doctrine-value-object)
+[![Downloads Monthly](https://img.shields.io/packagist/dm/yokai/doctrine-value-object?style=flat-square)](https://packagist.org/packages/yokai/doctrine-value-object/stats)
 
 This library offer you an easy way to handle **value objects** in a **Doctrine ORM** application.
 
