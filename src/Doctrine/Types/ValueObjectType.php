@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yokai\DoctrineValueObject\Doctrine\Types;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Webmozart\Assert\Assert;
 
 trait ValueObjectType
@@ -49,5 +50,13 @@ trait ValueObjectType
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
     }
 }
