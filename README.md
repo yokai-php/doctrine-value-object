@@ -1,6 +1,6 @@
 # Value Objects for Doctrine ORM simplified
 
-[![Tests](https://img.shields.io/github/workflow/status/yokai-php/doctrine-value-object/Tests?style=flat-square&label=tests)](https://github.com/yokai-php/doctrine-value-object/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/yokai-php/doctrine-value-object/tests.yml?branch=main&style=flat-square&label=tests)](https://github.com/yokai-php/doctrine-value-object/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/yokai-php/doctrine-value-object?style=flat-square)](https://codecov.io/gh/yokai-php/doctrine-value-object)
 [![Contributors](https://img.shields.io/github/contributors/yokai-php/doctrine-value-object?style=flat-square)](https://github.com/yokai-php/doctrine-value-object/graphs/contributors)
 
