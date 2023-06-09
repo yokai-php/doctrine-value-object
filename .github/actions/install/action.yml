@@ -1,0 +1,28 @@
+name: Prepare env & install dependencies
+
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        required: true
+        type: string
+      coverage-mode:
+        required: false
+        type: string
+        default: 'none'
+    secrets:
+      token:
+        required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Setup PHP"
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: ${{ inputs.coverage-mode }}
+        php-version: ${{ inputs.php-version }}
+    - name: "Install dependencies with composer"
+      shell: bash
+      run: |
+        composer update --no-interaction --no-progress --no-suggest
