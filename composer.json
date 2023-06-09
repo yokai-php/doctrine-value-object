@@ -23,7 +23,7 @@
     "phpunit/phpunit": "^9.4",
     "phpstan/phpstan": "^0.12.76",
     "squizlabs/php_codesniffer": "^3.5",
-    "symfony/cache": "^6.3"
+    "symfony/cache": "^5.4|^6.0"
   },
   "autoload-dev": {
     "psr-4": {
