@@ -77,7 +77,7 @@ final class EntityTest extends TestCase
         $sql = "SELECT * FROM user WHERE id = ?";
         $row = $entityManager->getConnection()->fetchAssociative($sql, [$user->id]);
         // assert all columns are filled with value object values
-        self::assertSame(0, $row['status']);
+        self::assertSame('0', (string)$row['status']);
         self::assertSame('1986-11-17 00:00:00', $row['birthdate']);
         self::assertSame('+33677889900', $row['contactPhoneNumber']);
         self::assertSame('["+33455667788","+33233445566"]', $row['phoneNumbers']);
