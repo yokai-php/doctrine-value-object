@@ -10,110 +10,61 @@ jobs:
   phpunit:
     name: "PHPUnit"
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         include:
-          - php-version: 8.0
-          - php-version: 8.2
-
+          - php-version: '8.0'
+          - php-version: '8.2'
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
+        uses: actions/checkout@v3
+      - name: "Setup env & install dependencies"
+        uses: ./.github/actions/install
         with:
-          coverage: none
           php-version: ${{ matrix.php-version }}
-
-      - name: "Install dependencies with composer"
-        run: |
-          composer update --no-interaction --no-progress --no-suggest
-
       - name: "Run tests with phpunit/phpunit"
         run: vendor/bin/phpunit
 
   phpstan:
     name: "PhpStan"
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        include:
-          - php-version: 8.2
-
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
+        uses: actions/checkout@v3
+      - name: "Setup env & install dependencies"
+        uses: ./.github/actions/install
         with:
-          coverage: none
-          php-version: ${{ matrix.php-version }}
-
-      - name: "Install dependencies with composer"
-        run: |
-          composer update --no-interaction --no-progress --no-suggest
-
+          php-version: '8.2'
       - name: "Run static analyzis with phpstan/phpstan"
         run: vendor/bin/phpstan analyze
 
   checkstyke:
     name: "Checkstyle"
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        include:
-          - php-version: 8.2
-
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
+        uses: actions/checkout@v3
+      - name: "Setup env & install dependencies"
+        uses: ./.github/actions/install
         with:
-          coverage: none
-          php-version: ${{ matrix.php-version }}
-
-      - name: "Install dependencies with composer"
-        run: |
-          composer update --no-interaction --no-progress --no-suggest
-
+          php-version: '8.2'
       - name: "Run checkstyle with squizlabs/php_codesniffer"
         run: vendor/bin/phpcs
 
   codecov:
     name: "Code coverage"
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        include:
-          - php-version: 8.2
-
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
+        uses: actions/checkout@v3
+      - name: "Setup env & install dependencies"
+        uses: ./.github/actions/install
         with:
-          coverage: xdebug
-          php-version: ${{ matrix.php-version }}
-
-      - name: "Install dependencies with composer"
-        run: |
-          composer update --no-interaction --no-progress --no-suggest
-
+          php-version: '8.2'
       - name: "Run tests with phpunit/phpunit"
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: |
           vendor/bin/phpunit --coverage-clover coverage.xml
-
       - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v1
