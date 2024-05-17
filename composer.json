@@ -10,9 +10,9 @@
     }
   ],
   "require": {
-    "php": "^8.1",
-    "doctrine/orm": "^3.1",
-    "doctrine/dbal": "^4.0",
+    "php": "^8",
+    "doctrine/orm": "^2.7|^3.1",
+    "doctrine/dbal": "^3.8|^4.0",
     "webmozart/assert": "^1.11"
   },
   "autoload": {
