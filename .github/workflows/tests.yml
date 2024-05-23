@@ -26,6 +26,8 @@ jobs:
         uses: ./.github/actions/install
         with:
           php-version: ${{ matrix.php-version }}
+          dbal-version: ${{ matrix.dbal-version }}
+          orm-version: ${{ matrix.orm-version }}
       - name: "Run tests with phpunit/phpunit"
         run: vendor/bin/phpunit
 
