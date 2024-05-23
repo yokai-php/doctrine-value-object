@@ -6,12 +6,21 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\StringValueObject;
 
-final class StringValueObjectType extends StringType
+final class StringValueObjectType extends Type
 {
     use ValueObjectType;
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        /** @var StringType $typeInherit */
+        $typeInherit = $this->getType(Types::STRING);
+        return $typeInherit->getSQLDeclaration($column, $platform);
+    }
 
     /**
      * @inheritdoc
@@ -24,7 +33,7 @@ final class StringValueObjectType extends StringType
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -33,7 +42,9 @@ final class StringValueObjectType extends StringType
         Assert::isInstanceOf($value, $this->class);
         /** @var StringValueObject $value */
 
-        return parent::convertToDatabaseValue($value->toValue(), $platform);
+        /** @var StringType $typeInherit */
+        $typeInherit = $this->getType(Types::STRING);
+        return $typeInherit->convertToDatabaseValue($value->toValue(), $platform);
     }
 
     /**
@@ -41,7 +52,10 @@ final class StringValueObjectType extends StringType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?StringValueObject
     {
-        $value = parent::convertToPHPValue($value, $platform);
+        /** @var StringType $typeInherit */
+        $typeInherit = $this->getType(Types::STRING);
+        $value = $typeInherit->convertToPHPValue($value, $platform);
+
         if ($value === null) {
             return null;
         }

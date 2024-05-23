@@ -7,12 +7,21 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\DateTimeTzImmutableType;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\DateTimeValueObject;
 
-final class DateTimeValueObjectType extends DateTimeTzImmutableType
+final class DateTimeValueObjectType extends Type
 {
     use ValueObjectType;
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        /** @var DateTimeTzImmutableType $typeInherit */
+        $typeInherit = $this->getType(Types::DATETIMETZ_IMMUTABLE);
+        return $typeInherit->getSQLDeclaration($column, $platform);
+    }
 
     /**
      * @inheritdoc
@@ -34,15 +43,20 @@ final class DateTimeValueObjectType extends DateTimeTzImmutableType
         Assert::isInstanceOf($value, $this->class);
         /** @var DateTimeValueObject $value */
 
-        return parent::convertToDatabaseValue($value->toValue(), $platform);
+        /** @var DateTimeTzImmutableType $typeInherit */
+        $typeInherit = $this->getType(Types::DATETIMETZ_IMMUTABLE);
+        return $typeInherit->convertToDatabaseValue($value->toValue(), $platform);
     }
 
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?DateTimeValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DateTimeValueObject
     {
-        $value = parent::convertToPHPValue($value, $platform);
+        /** @var DateTimeTzImmutableType $typeInherit */
+        $typeInherit = $this->getType(Types::DATETIMETZ_IMMUTABLE);
+        $value = $typeInherit->convertToPHPValue($value, $platform);
+
         if ($value === null) {
             return null;
         }

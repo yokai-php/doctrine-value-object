@@ -6,12 +6,21 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\CollectionValueObject;
 
-final class CollectionValueObjectType extends JsonType
+final class CollectionValueObjectType extends Type
 {
     use ValueObjectType;
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        /** @var JsonType $typeInherit */
+        $typeInherit = $this->getType(Types::JSON);
+        return $typeInherit->getSQLDeclaration($column, $platform);
+    }
 
     /**
      * @inheritdoc
@@ -33,7 +42,9 @@ final class CollectionValueObjectType extends JsonType
         Assert::isInstanceOf($value, $this->class);
         /** @var CollectionValueObject $value */
 
-        return parent::convertToDatabaseValue($value->toValue(), $platform);
+        /** @var JsonType $typeInherit */
+        $typeInherit = $this->getType(Types::JSON);
+        return $typeInherit->convertToDatabaseValue($value->toValue(), $platform);
     }
 
     /**
@@ -41,7 +52,10 @@ final class CollectionValueObjectType extends JsonType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?CollectionValueObject
     {
-        $value = parent::convertToPHPValue($value, $platform);
+        /** @var JsonType $typeInherit */
+        $typeInherit = $this->getType(Types::JSON);
+        $value = $typeInherit->convertToPHPValue($value, $platform);
+
         if ($value === null) {
             return null;
         }

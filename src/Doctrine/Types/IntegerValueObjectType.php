@@ -6,12 +6,21 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\IntegerType;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\IntegerValueObject;
 
-final class IntegerValueObjectType extends IntegerType
+final class IntegerValueObjectType extends Type
 {
     use ValueObjectType;
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        /** @var IntegerType $typeInherit */
+        $typeInherit = $this->getType(Types::INTEGER);
+        return $typeInherit->getSQLDeclaration($column, $platform);
+    }
 
     /**
      * @inheritdoc
@@ -33,7 +42,9 @@ final class IntegerValueObjectType extends IntegerType
         Assert::isInstanceOf($value, $this->class);
         /** @var IntegerValueObject $value */
 
-        return parent::convertToPHPValue($value->toValue(), $platform);
+        /** @var IntegerType $typeInherit */
+        $typeInherit = $this->getType(Types::INTEGER);
+        return $typeInherit->convertToPHPValue($value->toValue(), $platform);
     }
 
     /**
@@ -41,7 +52,10 @@ final class IntegerValueObjectType extends IntegerType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?IntegerValueObject
     {
-        $value = parent::convertToPHPValue($value, $platform);
+        /** @var IntegerType $typeInherit */
+        $typeInherit = $this->getType(Types::INTEGER);
+        $value = $typeInherit->convertToPHPValue($value, $platform);
+
         if ($value === null) {
             return null;
         }

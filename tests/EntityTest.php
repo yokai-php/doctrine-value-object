@@ -106,7 +106,10 @@ final class EntityTest extends TestCase
 
         // create entity manager with an sqlite in memory storage
         $config = ORMSetup::createAttributeMetadataConfiguration([__DIR__], true);
-        $connection = DriverManager::getConnection(['url' => 'sqlite:///:memory:']);
+        $connection = DriverManager::getConnection([
+            'driver' => 'pdo_sqlite',
+            'url' => 'sqlite:///:memory:'
+        ]);
         $entityManager = new EntityManager($connection, $config);
         // create schema
         (new SchemaTool($entityManager))
