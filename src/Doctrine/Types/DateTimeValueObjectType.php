@@ -18,9 +18,7 @@ final class DateTimeValueObjectType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        /** @var DateTimeTzImmutableType $typeInherit */
-        $typeInherit = $this->getType(Types::DATETIMETZ_IMMUTABLE);
-        return $typeInherit->getSQLDeclaration($column, $platform);
+        return $this->getInheritedType()->getSQLDeclaration($column, $platform);
     }
 
     /**
@@ -34,7 +32,7 @@ final class DateTimeValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -43,9 +41,7 @@ final class DateTimeValueObjectType extends Type
         Assert::isInstanceOf($value, $this->class);
         /** @var DateTimeValueObject $value */
 
-        /** @var DateTimeTzImmutableType $typeInherit */
-        $typeInherit = $this->getType(Types::DATETIMETZ_IMMUTABLE);
-        return $typeInherit->convertToDatabaseValue($value->toValue(), $platform);
+        return $this->getInheritedType()->convertToDatabaseValue($value->toValue(), $platform);
     }
 
     /**
@@ -53,9 +49,7 @@ final class DateTimeValueObjectType extends Type
      */
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?DateTimeValueObject
     {
-        /** @var DateTimeTzImmutableType $typeInherit */
-        $typeInherit = $this->getType(Types::DATETIMETZ_IMMUTABLE);
-        $value = $typeInherit->convertToPHPValue($value, $platform);
+        $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 
         if ($value === null) {
             return null;
@@ -68,5 +62,13 @@ final class DateTimeValueObjectType extends Type
         Assert::isInstanceOf($object, $this->class);
 
         return $object;
+    }
+
+    private function getInheritedType(): DateTimeTzImmutableType
+    {
+        /** @var DateTimeTzImmutableType $type */
+        $type = $this->getType(Types::DATETIMETZ_IMMUTABLE);
+
+        return $type;
     }
 }

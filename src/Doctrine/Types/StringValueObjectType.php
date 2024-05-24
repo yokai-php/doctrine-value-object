@@ -17,9 +17,7 @@ final class StringValueObjectType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        /** @var StringType $typeInherit */
-        $typeInherit = $this->getType(Types::STRING);
-        return $typeInherit->getSQLDeclaration($column, $platform);
+        return $this->getInheritedType()->getSQLDeclaration($column, $platform);
     }
 
     /**
@@ -33,7 +31,7 @@ final class StringValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -42,19 +40,15 @@ final class StringValueObjectType extends Type
         Assert::isInstanceOf($value, $this->class);
         /** @var StringValueObject $value */
 
-        /** @var StringType $typeInherit */
-        $typeInherit = $this->getType(Types::STRING);
-        return $typeInherit->convertToDatabaseValue($value->toValue(), $platform);
+        return $this->getInheritedType()->convertToDatabaseValue($value->toValue(), $platform);
     }
 
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?StringValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?StringValueObject
     {
-        /** @var StringType $typeInherit */
-        $typeInherit = $this->getType(Types::STRING);
-        $value = $typeInherit->convertToPHPValue($value, $platform);
+        $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 
         if ($value === null) {
             return null;
@@ -67,5 +61,13 @@ final class StringValueObjectType extends Type
         Assert::isInstanceOf($object, $this->class);
 
         return $object;
+    }
+
+    private function getInheritedType(): StringType
+    {
+        /** @var StringType $type */
+        $type = $this->getType(Types::STRING);
+
+        return $type;
     }
 }

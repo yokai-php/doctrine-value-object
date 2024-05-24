@@ -17,9 +17,7 @@ final class CollectionValueObjectType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        /** @var JsonType $typeInherit */
-        $typeInherit = $this->getType(Types::JSON);
-        return $typeInherit->getSQLDeclaration($column, $platform);
+        return $this->getInheritedType()->getSQLDeclaration($column, $platform);
     }
 
     /**
@@ -33,7 +31,7 @@ final class CollectionValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -42,19 +40,15 @@ final class CollectionValueObjectType extends Type
         Assert::isInstanceOf($value, $this->class);
         /** @var CollectionValueObject $value */
 
-        /** @var JsonType $typeInherit */
-        $typeInherit = $this->getType(Types::JSON);
-        return $typeInherit->convertToDatabaseValue($value->toValue(), $platform);
+        return $this->getInheritedType()->convertToDatabaseValue($value->toValue(), $platform);
     }
 
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?CollectionValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?CollectionValueObject
     {
-        /** @var JsonType $typeInherit */
-        $typeInherit = $this->getType(Types::JSON);
-        $value = $typeInherit->convertToPHPValue($value, $platform);
+        $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 
         if ($value === null) {
             return null;
@@ -67,5 +61,13 @@ final class CollectionValueObjectType extends Type
         Assert::isInstanceOf($collection, $this->class);
 
         return $collection;
+    }
+
+    private function getInheritedType(): JsonType
+    {
+        /** @var JsonType $type */
+        $type = $this->getType(Types::JSON);
+
+        return $type;
     }
 }

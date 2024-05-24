@@ -14,7 +14,11 @@ jobs:
       matrix:
         include:
           - php-version: '8.0'
+            dbal-version: '^3.8'
+            orm-version: '^2.7'
           - php-version: '8.2'
+            dbal-version: '^4.0'
+            orm-version: '^3.1'
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
@@ -22,6 +26,8 @@ jobs:
         uses: ./.github/actions/install
         with:
           php-version: ${{ matrix.php-version }}
+          dbal-version: ${{ matrix.dbal-version }}
+          orm-version: ${{ matrix.orm-version }}
       - name: "Run tests with phpunit/phpunit"
         run: vendor/bin/phpunit
 
@@ -35,6 +41,8 @@ jobs:
         uses: ./.github/actions/install
         with:
           php-version: '8.2'
+          dbal-version: '^4.0'
+          orm-version: '^3.1'
       - name: "Run static analyzis with phpstan/phpstan"
         run: vendor/bin/phpstan analyze
 
@@ -48,6 +56,8 @@ jobs:
         uses: ./.github/actions/install
         with:
           php-version: '8.2'
+          dbal-version: '^4.0'
+          orm-version: '^3.1'
       - name: "Run checkstyle with squizlabs/php_codesniffer"
         run: vendor/bin/phpcs
 
@@ -61,6 +71,8 @@ jobs:
         uses: ./.github/actions/install
         with:
           php-version: '8.2'
+          dbal-version: '^4.0'
+          orm-version: '^3.1'
       - name: "Run tests with phpunit/phpunit"
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

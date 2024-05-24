@@ -17,9 +17,7 @@ final class IntegerValueObjectType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        /** @var IntegerType $typeInherit */
-        $typeInherit = $this->getType(Types::INTEGER);
-        return $typeInherit->getSQLDeclaration($column, $platform);
+        return $this->getInheritedType()->getSQLDeclaration($column, $platform);
     }
 
     /**
@@ -33,7 +31,7 @@ final class IntegerValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
         if ($value === null) {
             return null;
@@ -42,19 +40,15 @@ final class IntegerValueObjectType extends Type
         Assert::isInstanceOf($value, $this->class);
         /** @var IntegerValueObject $value */
 
-        /** @var IntegerType $typeInherit */
-        $typeInherit = $this->getType(Types::INTEGER);
-        return $typeInherit->convertToPHPValue($value->toValue(), $platform);
+        return $this->getInheritedType()->convertToPHPValue($value->toValue(), $platform);
     }
 
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?IntegerValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?IntegerValueObject
     {
-        /** @var IntegerType $typeInherit */
-        $typeInherit = $this->getType(Types::INTEGER);
-        $value = $typeInherit->convertToPHPValue($value, $platform);
+        $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 
         if ($value === null) {
             return null;
@@ -67,5 +61,13 @@ final class IntegerValueObjectType extends Type
         Assert::isInstanceOf($object, $this->class);
 
         return $object;
+    }
+
+    private function getInheritedType(): IntegerType
+    {
+        /** @var IntegerType $type */
+        $type = $this->getType(Types::INTEGER);
+
+        return $type;
     }
 }
