@@ -17,9 +17,7 @@ final class ObjectValueObjectType extends Type
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        /** @var JsonType $typeInherit */
-        $typeInherit = $this->getType(Types::JSON);
-        return $typeInherit->getSQLDeclaration($column, $platform);
+        return $this->getInheritedType()->getSQLDeclaration($column, $platform);
     }
 
     /**
@@ -42,9 +40,7 @@ final class ObjectValueObjectType extends Type
         Assert::isInstanceOf($value, $this->class);
         /** @var ObjectValueObject $value */
 
-        /** @var JsonType $typeInherit */
-        $typeInherit = $this->getType(Types::JSON);
-        return $typeInherit->convertToDatabaseValue($value->toValue(), $platform);
+        return $this->getInheritedType()->convertToDatabaseValue($value->toValue(), $platform);
     }
 
     /**
@@ -52,9 +48,7 @@ final class ObjectValueObjectType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?ObjectValueObject
     {
-        /** @var JsonType $typeInherit */
-        $typeInherit = $this->getType(Types::JSON);
-        $value = $typeInherit->convertToPHPValue($value, $platform);
+        $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 
         if ($value === null) {
             return null;
@@ -67,5 +61,13 @@ final class ObjectValueObjectType extends Type
         Assert::isInstanceOf($collection, $this->class);
 
         return $collection;
+    }
+
+    private function getInheritedType(): JsonType
+    {
+        /** @var JsonType $type */
+        $type = $this->getType(Types::JSON);
+
+        return $type;
     }
 }
