@@ -46,7 +46,7 @@ final class CollectionValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?CollectionValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?CollectionValueObject
     {
         $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 

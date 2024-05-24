@@ -31,7 +31,7 @@ final class ObjectValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         if ($value === null) {
             return null;
@@ -46,7 +46,7 @@ final class ObjectValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?ObjectValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?ObjectValueObject
     {
         $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 

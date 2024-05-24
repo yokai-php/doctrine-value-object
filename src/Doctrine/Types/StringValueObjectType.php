@@ -46,7 +46,7 @@ final class StringValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?StringValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?StringValueObject
     {
         $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 

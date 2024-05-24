@@ -31,7 +31,7 @@ final class IntegerValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
         if ($value === null) {
             return null;
@@ -46,7 +46,7 @@ final class IntegerValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?IntegerValueObject
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?IntegerValueObject
     {
         $value = $this->getInheritedType()->convertToPHPValue($value, $platform);
 
