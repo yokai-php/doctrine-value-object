@@ -97,7 +97,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 final class Entity
 {
-     #[ORM\Column(type="doctrine_type_name")]
+    #[ORM\Column(type="doctrine_type_name")]
     public MyValueObject $status;
 }
 ```
