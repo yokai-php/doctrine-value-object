@@ -51,6 +51,38 @@ class Kernel extends BaseKernel
 }
 ```
 
+You can also leverage the power of attributes, 
+along with [`olvlvl/composer-attribute-collector`](https://github.com/olvlvl/composer-attribute-collector), 
+to automatically register all your value objects at once.
+
+```php
+use Doctrine\DBAL\Types\Type;
+use Yokai\DoctrineValueObject\Doctrine\Types;
+
+#[\Attribute(\Attribute::TARGET_CLASS)]
+final readonly class AsValueObject
+{
+    public function __construct(
+        public string $name,
+    ) {
+    }
+}
+
+#[AsValueObject(MyValueObject::DOCTRINE_TYPE_NAME)]
+final class MyValueObject implements \Yokai\DoctrineValueObject\StringValueObject
+{
+    public const DOCTRINE_TYPE_NAME = 'doctrine_type_name';
+}
+
+$types = [];
+foreach (Attributes::findTargetClasses(AsValueObject::class) as $target) {
+    /** @var AsValueObject $attribute */
+    $attribute = $target->attribute;
+    $types[$attribute->name] = $target->name;
+}
+(new Types($types))->register(Type::getTypeRegistry());
+```
+
 
 ## Usage
 
@@ -65,9 +97,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 final class Entity
 {
-    /**
-     * @ORM\Column(type="doctrine_type_name")
-     */
+     #[ORM\Column(type="doctrine_type_name")]
     public MyValueObject $status;
 }
 ```
