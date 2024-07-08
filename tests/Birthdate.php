@@ -36,7 +36,7 @@ final class Birthdate implements DateTimeValueObject
         return ((int)\date('Y')) - ((int) $this->date->format('Y'));
     }
 
-    public function isAllowedToDrinkBeer(bool $parentsWillNotKnow): int
+    public function isAllowedToDrinkBeer(bool $parentsWillNotKnow): bool
     {
         if ($parentsWillNotKnow) {
             return true; // but be careful :)

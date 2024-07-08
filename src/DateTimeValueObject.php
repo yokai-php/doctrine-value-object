@@ -6,9 +6,6 @@ namespace Yokai\DoctrineValueObject;
 
 use DateTimeInterface;
 
-/**
- * todo php x : replace with type generic Collection<StringValueObject>
- */
 interface DateTimeValueObject
 {
     public static function fromValue(DateTimeInterface $value): static;

@@ -8,7 +8,9 @@ use Countable;
 use IteratorAggregate;
 
 /**
- * todo php x : replace with type generic Collection<StringValueObject>
+ * @template TKey
+ * @template-covariant TValue
+ * @template-extends IteratorAggregate<TKey, TValue>
  */
 interface CollectionValueObject extends Countable, IteratorAggregate
 {

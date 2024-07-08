@@ -6,6 +6,9 @@ namespace Yokai\DoctrineValueObject\Tests;
 
 use Yokai\DoctrineValueObject\CollectionValueObject;
 
+/**
+ * @template-implements CollectionValueObject<int, PhoneNumber>
+ */
 final class PhoneNumbers implements CollectionValueObject
 {
     private array $numbers;
@@ -35,17 +38,11 @@ final class PhoneNumbers implements CollectionValueObject
         return \count($this->numbers);
     }
 
-    /**
-     * @return \ArrayIterator<PhoneNumber>
-     */
-    public function getIterator(): \ArrayIterator
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->numbers);
     }
 
-    /**
-     * @return PhoneNumber[]
-     */
     public function getNumbers(): array
     {
         return $this->numbers;
