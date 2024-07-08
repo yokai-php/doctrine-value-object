@@ -7,7 +7,7 @@ namespace Yokai\DoctrineValueObject\Tests;
 use DateTimeInterface;
 use Yokai\DoctrineValueObject\DateTimeValueObject;
 
-class Birthdate implements DateTimeValueObject
+final class Birthdate implements DateTimeValueObject
 {
     private DateTimeInterface $date;
 
@@ -16,7 +16,7 @@ class Birthdate implements DateTimeValueObject
         $this->date = $date;
     }
 
-    public static function fromValue(DateTimeInterface $value): self
+    public static function fromValue(DateTimeInterface $value): static
     {
         return new static($value);
     }

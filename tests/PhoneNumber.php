@@ -6,7 +6,7 @@ namespace Yokai\DoctrineValueObject\Tests;
 
 use Yokai\DoctrineValueObject\StringValueObject;
 
-class PhoneNumber implements StringValueObject
+final class PhoneNumber implements StringValueObject
 {
     private string $number;
 
@@ -19,9 +19,9 @@ class PhoneNumber implements StringValueObject
         $this->number = $number;
     }
 
-    public static function fromValue(string $value): self
+    public static function fromValue(string $value): static
     {
-        return new self($value);
+        return new static($value);
     }
 
     public function toValue(): string

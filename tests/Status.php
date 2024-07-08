@@ -7,7 +7,7 @@ namespace Yokai\DoctrineValueObject\Tests;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\IntegerValueObject;
 
-class Status implements IntegerValueObject
+final class Status implements IntegerValueObject
 {
     private const ANONYMOUS = 0;
     private const REGISTERED = 1;
@@ -34,9 +34,9 @@ class Status implements IntegerValueObject
         return new self(self::ANONYMOUS);
     }
 
-    public static function fromValue(int $value): IntegerValueObject
+    public static function fromValue(int $value): static
     {
-        return new self($value);
+        return new static($value);
     }
 
     public function toValue(): int
