@@ -17,9 +17,9 @@ final class Notifications implements ObjectValueObject
         $this->sms = $sms;
     }
 
-    public static function fromValue(array $value): ObjectValueObject
+    public static function fromValue(array $value): static
     {
-        return new self(
+        return new static(
             $value['email'] ?? false,
             $value['sms'] ?? false
         );

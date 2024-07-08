@@ -6,7 +6,7 @@ namespace Yokai\DoctrineValueObject\Tests;
 
 use Yokai\DoctrineValueObject\CollectionValueObject;
 
-class PhoneNumbers implements CollectionValueObject
+final class PhoneNumbers implements CollectionValueObject
 {
     private array $numbers;
 
@@ -18,7 +18,7 @@ class PhoneNumbers implements CollectionValueObject
         $this->numbers = $numbers;
     }
 
-    public static function fromValue(array $value): self
+    public static function fromValue(array $value): static
     {
         return new static(
             \array_map([PhoneNumber::class, 'fromValue'], $value)
