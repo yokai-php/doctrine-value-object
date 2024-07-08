@@ -35,13 +35,14 @@ final class EntityTest extends TestCase
 
         // fetch row from database
         $sql = "SELECT * FROM user WHERE id = ?";
+        /** @var array<string, string> $row */
         $row = $entityManager->getConnection()->fetchAssociative($sql, [$user->id]);
         // assert all columns are null
-        self::assertNull($row['status']);
-        self::assertNull($row['birthdate']);
-        self::assertNull($row['contactPhoneNumber']);
-        self::assertNull($row['phoneNumbers']);
-        self::assertNull($row['notifications']);
+        self::assertNull($row['status'] ?? null);
+        self::assertNull($row['birthdate'] ?? null);
+        self::assertNull($row['contactPhoneNumber'] ?? null);
+        self::assertNull($row['phoneNumbers'] ?? null);
+        self::assertNull($row['notifications'] ?? null);
 
         // fetch entity from database
         /** @var User $user */
@@ -75,27 +76,28 @@ final class EntityTest extends TestCase
 
         // fetch row from database
         $sql = "SELECT * FROM user WHERE id = ?";
+        /** @var array<string, string> $row */
         $row = $entityManager->getConnection()->fetchAssociative($sql, [$user->id]);
         // assert all columns are filled with value object values
-        self::assertSame('0', (string)$row['status']);
-        self::assertSame('1986-11-17 00:00:00', $row['birthdate']);
-        self::assertSame('+33677889900', $row['contactPhoneNumber']);
-        self::assertSame('["+33455667788","+33233445566"]', $row['phoneNumbers']);
-        self::assertSame('{"email":true,"sms":false}', $row['notifications']);
+        self::assertSame('0', (string)($row['status'] ?? null));
+        self::assertSame('1986-11-17 00:00:00', $row['birthdate'] ?? null);
+        self::assertSame('+33677889900', $row['contactPhoneNumber'] ?? null);
+        self::assertSame('["+33455667788","+33233445566"]', $row['phoneNumbers'] ?? null);
+        self::assertSame('{"email":true,"sms":false}', $row['notifications'] ?? null);
 
         // fetch entity from database
         /** @var User $user */
         $user = $entityManager->find(User::class, $user->id);
         // assert all properties are hydrated to value objects
         self::assertNotNull($user);
-        self::assertSame(0, $user->status->getStatus());
-        self::assertSame('1986-11-17', $user->birthdate->getDate()->format('Y-m-d'));
-        self::assertSame('+33677889900', $user->contactPhoneNumber->getNumber());
+        self::assertSame(0, $user->status?->getStatus());
+        self::assertSame('1986-11-17', $user->birthdate?->getDate()->format('Y-m-d'));
+        self::assertSame('+33677889900', $user->contactPhoneNumber?->getNumber());
         self::assertSame(
             ['+33455667788', '+33233445566'],
-            \array_map(fn(PhoneNumber $number) => $number->getNumber(), $user->phoneNumbers->getNumbers())
+            \array_map(fn(PhoneNumber $number) => $number->getNumber(), $user->phoneNumbers?->getNumbers() ?? [])
         );
-        self::assertTrue($user->notifications->isEmail());
+        self::assertTrue($user->notifications?->isEmail());
         self::assertFalse($user->notifications->isSms());
     }
 
