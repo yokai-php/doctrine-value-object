@@ -7,7 +7,6 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\StringValueObject;
 
@@ -65,9 +64,6 @@ final class StringValueObjectType extends Type
 
     private function getInheritedType(): StringType
     {
-        /** @var StringType $type */
-        $type = $this->getType(Types::STRING);
-
-        return $type;
+        return new StringType();
     }
 }

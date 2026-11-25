@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yokai\DoctrineValueObject\Tests;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\TypeRegistry;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yokai\DoctrineValueObject\Doctrine\Types;
@@ -17,6 +17,6 @@ final class RegisterTypesTest extends TestCase
         $this->expectExceptionMessage(
             'Value object named "foo" associated to type "stdClass" has no related doctrine type'
         );
-        (new Types(['foo' => \stdClass::class]))->register(Type::getTypeRegistry());
+        (new Types(['foo' => \stdClass::class]))->register(new TypeRegistry());
     }
 }

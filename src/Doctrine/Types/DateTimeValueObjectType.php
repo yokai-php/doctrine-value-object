@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\DateTimeTzImmutableType;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\DateTimeValueObject;
 
@@ -66,9 +65,6 @@ final class DateTimeValueObjectType extends Type
 
     private function getInheritedType(): DateTimeTzImmutableType
     {
-        /** @var DateTimeTzImmutableType $type */
-        $type = $this->getType(Types::DATETIMETZ_IMMUTABLE);
-
-        return $type;
+        return new DateTimeTzImmutableType();
     }
 }

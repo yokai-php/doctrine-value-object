@@ -7,7 +7,6 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\IntegerValueObject;
 
@@ -65,9 +64,6 @@ final class IntegerValueObjectType extends Type
 
     private function getInheritedType(): IntegerType
     {
-        /** @var IntegerType $type */
-        $type = $this->getType(Types::INTEGER);
-
-        return $type;
+        return new IntegerType();
     }
 }

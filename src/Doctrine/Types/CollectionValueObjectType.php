@@ -7,7 +7,6 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\CollectionValueObject;
 
@@ -65,9 +64,6 @@ final class CollectionValueObjectType extends Type
 
     private function getInheritedType(): JsonType
     {
-        /** @var JsonType $type */
-        $type = $this->getType(Types::JSON);
-
-        return $type;
+        return new JsonType();
     }
 }
