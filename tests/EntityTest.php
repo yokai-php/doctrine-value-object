@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Yokai\DoctrineValueObject\Tests;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\TypeRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Internal\TypeProviderLocator;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
@@ -104,19 +108,45 @@ final class EntityTest extends TestCase
     private function manager(): EntityManager
     {
         // register value object types
-        (new Types(self::TYPES))->register(Type::getTypeRegistry());
+        $configuration = new Configuration();
+        $configuration->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
+        (new Types(self::TYPES))->register(self::typeRegistry($configuration));
 
         // create entity manager with an sqlite in memory storage
         $config = ORMSetup::createAttributeMetadataConfiguration([__DIR__], true);
-        $connection = DriverManager::getConnection([
-            'driver' => 'pdo_sqlite',
-            'url' => 'sqlite:///:memory:'
-        ]);
+        if (\PHP_VERSION_ID >= 80400 && \method_exists($config, 'enableNativeLazyObjects')) {
+            // ORM >= 3.5 on PHP >= 8.4: symfony/var-exporter >= 8 no longer provides lazy ghosts
+            $config->enableNativeLazyObjects(true);
+        }
+        $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true], $configuration);
         $entityManager = new EntityManager($connection, $config);
         // create schema
         (new SchemaTool($entityManager))
             ->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
 
         return $entityManager;
+    }
+
+    private static function typeRegistry(Configuration $configuration): TypeRegistry
+    {
+        if (!\method_exists($configuration, 'getTypeProvider') || !\method_exists($configuration, 'setTypeProvider')) {
+            // DBAL < 4.6: types are resolved through the global type registry
+            return Type::getTypeRegistry();
+        }
+
+        if (!\class_exists(TypeProviderLocator::class)) {
+            // DBAL >= 4.6, ORM < 3.8: the ORM resolves types through the global type registry,
+            // which is the default type provider of the connection configuration
+            $registry = $configuration->getTypeProvider();
+            self::assertInstanceOf(TypeRegistry::class, $registry);
+
+            return $registry;
+        }
+
+        // DBAL >= 4.6, ORM >= 3.8: types are scoped to the connection
+        $registry = new TypeRegistry();
+        $configuration->setTypeProvider($registry);
+
+        return $registry;
     }
 }

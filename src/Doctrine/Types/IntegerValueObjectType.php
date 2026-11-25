@@ -31,7 +31,7 @@ final class IntegerValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -63,11 +63,13 @@ final class IntegerValueObjectType extends Type
         return $object;
     }
 
-    private function getInheritedType(): IntegerType
+    private static function getInheritedTypeName(): string
     {
-        /** @var IntegerType $type */
-        $type = $this->getType(Types::INTEGER);
+        return Types::INTEGER;
+    }
 
-        return $type;
+    private static function createInheritedType(): Type
+    {
+        return new IntegerType();
     }
 }

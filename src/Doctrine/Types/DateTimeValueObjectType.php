@@ -32,7 +32,7 @@ final class DateTimeValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -64,11 +64,13 @@ final class DateTimeValueObjectType extends Type
         return $object;
     }
 
-    private function getInheritedType(): DateTimeTzImmutableType
+    private static function getInheritedTypeName(): string
     {
-        /** @var DateTimeTzImmutableType $type */
-        $type = $this->getType(Types::DATETIMETZ_IMMUTABLE);
+        return Types::DATETIMETZ_IMMUTABLE;
+    }
 
-        return $type;
+    private static function createInheritedType(): Type
+    {
+        return new DateTimeTzImmutableType();
     }
 }

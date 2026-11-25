@@ -31,7 +31,7 @@ final class CollectionValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -63,11 +63,13 @@ final class CollectionValueObjectType extends Type
         return $collection;
     }
 
-    private function getInheritedType(): JsonType
+    private static function getInheritedTypeName(): string
     {
-        /** @var JsonType $type */
-        $type = $this->getType(Types::JSON);
+        return Types::JSON;
+    }
 
-        return $type;
+    private static function createInheritedType(): Type
+    {
+        return new JsonType();
     }
 }

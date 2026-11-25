@@ -23,6 +23,24 @@ composer require yokai/doctrine-value-object
 
 You will have to register your value object types to the Doctrine type system.
 
+With DBAL 4.6+ and ORM 3.8+, give them to the connection, through the type provider of its configuration.
+
+```php
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Types\TypeRegistry;
+use Yokai\DoctrineValueObject\Doctrine\Types;
+
+$registry = new TypeRegistry(); // contains DBAL built-in types
+(new Types(['doctrine_type_name' => MyValueObject::class]))->register($registry);
+
+$configuration = new Configuration();
+$configuration->setTypeProvider($registry);
+$connection = DriverManager::getConnection($params, $configuration);
+```
+
+With older versions, register them in the global type registry.
+
 ```php
 use Doctrine\DBAL\Types\Type;
 use Yokai\DoctrineValueObject\Doctrine\Types;
@@ -31,10 +49,18 @@ use Yokai\DoctrineValueObject\Doctrine\Types;
     ->register(Type::getTypeRegistry());
 ```
 
+> `Type::getTypeRegistry()` is deprecated since DBAL 4.6.
+> If you still need the global type registry (e.g. with ORM < 3.8, which resolves types through it),
+> it is the default type provider of a fresh configuration:
+> `(new Configuration())->getTypeProvider()`.
+> This is only a transition: there will be no global type registry in DBAL 5.
+
 If you are using **Symfony**, you can register your value object types in the kernel construction.
+The connections that DoctrineBundle creates fall back to the global type registry.
 
 ```php
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Types\TypeRegistry;
 use Yokai\DoctrineValueObject\Doctrine\Types;
 
 class Kernel extends BaseKernel
@@ -46,7 +72,11 @@ class Kernel extends BaseKernel
     public function __construct(string $environment, bool $debug)
     {
         parent::__construct($environment, $debug);
-        (new Types(self::DOCTRINE_VALUE_OBJECTS))->register(Type::getTypeRegistry());
+
+        // with DBAL < 4.6, use Type::getTypeRegistry() instead
+        $registry = (new Configuration())->getTypeProvider();
+        \assert($registry instanceof TypeRegistry);
+        (new Types(self::DOCTRINE_VALUE_OBJECTS))->register($registry);
     }
 }
 ```
@@ -56,7 +86,6 @@ along with [`olvlvl/composer-attribute-collector`](https://github.com/olvlvl/com
 to automatically register all your value objects at once.
 
 ```php
-use Doctrine\DBAL\Types\Type;
 use Yokai\DoctrineValueObject\Doctrine\Types;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
@@ -80,7 +109,7 @@ foreach (Attributes::findTargetClasses(AsValueObject::class) as $target) {
     $attribute = $target->attribute;
     $types[$attribute->name] = $target->name;
 }
-(new Types($types))->register(Type::getTypeRegistry());
+(new Types($types))->register($registry); // the registry of your choice, see above
 ```
 
 

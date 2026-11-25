@@ -63,11 +63,13 @@ final class StringValueObjectType extends Type
         return $object;
     }
 
-    private function getInheritedType(): StringType
+    private static function getInheritedTypeName(): string
     {
-        /** @var StringType $type */
-        $type = $this->getType(Types::STRING);
+        return Types::STRING;
+    }
 
-        return $type;
+    private static function createInheritedType(): Type
+    {
+        return new StringType();
     }
 }
