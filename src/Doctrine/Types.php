@@ -31,17 +31,17 @@ final class Types
     {
         foreach ($this->types as $doctrineTypeName => $valueObjectType) {
             if (!$types->has($doctrineTypeName)) {
-                $types->register($doctrineTypeName, $this->type($valueObjectType, $doctrineTypeName));
+                $types->register($doctrineTypeName, $this->type($valueObjectType, $doctrineTypeName, $types));
             }
         }
     }
 
-    private function type(string $valueObjectType, string $doctrineTypeName): Type
+    private function type(string $valueObjectType, string $doctrineTypeName, TypeRegistry $types): Type
     {
         foreach (self::DOCTRINE_TYPES as $doctrineTypeClass) {
             $supportValueObjectType = \call_user_func([$doctrineTypeClass, 'getSupportedValueObjectType']);
             if (\is_a($valueObjectType, $supportValueObjectType, true)) {
-                return \call_user_func([$doctrineTypeClass, 'create'], $valueObjectType, $doctrineTypeName);
+                return \call_user_func([$doctrineTypeClass, 'create'], $valueObjectType, $doctrineTypeName, $types);
             }
         }
 

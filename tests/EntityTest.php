@@ -11,6 +11,7 @@ use Doctrine\DBAL\Schema\DefaultSchemaManagerFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\TypeRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Internal\TypeProviderLocator;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
@@ -128,12 +129,21 @@ final class EntityTest extends TestCase
 
     private static function typeRegistry(Configuration $configuration): TypeRegistry
     {
-        if (!\method_exists($configuration, 'setTypeProvider')) {
+        if (!\method_exists($configuration, 'getTypeProvider') || !\method_exists($configuration, 'setTypeProvider')) {
             // DBAL < 4.6: types are resolved through the global type registry
             return Type::getTypeRegistry();
         }
 
-        // DBAL >= 4.6: types are scoped to the connection (ORM >= 3.8 resolves types through it)
+        if (!\class_exists(TypeProviderLocator::class)) {
+            // DBAL >= 4.6, ORM < 3.8: the ORM resolves types through the global type registry,
+            // which is the default type provider of the connection configuration
+            $registry = $configuration->getTypeProvider();
+            self::assertInstanceOf(TypeRegistry::class, $registry);
+
+            return $registry;
+        }
+
+        // DBAL >= 4.6, ORM >= 3.8: types are scoped to the connection
         $registry = new TypeRegistry();
         $configuration->setTypeProvider($registry);
 

@@ -7,6 +7,7 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\IntegerValueObject;
 
@@ -30,7 +31,7 @@ final class IntegerValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -62,7 +63,12 @@ final class IntegerValueObjectType extends Type
         return $object;
     }
 
-    private function getInheritedType(): IntegerType
+    private static function getInheritedTypeName(): string
+    {
+        return Types::INTEGER;
+    }
+
+    private static function createInheritedType(): Type
     {
         return new IntegerType();
     }

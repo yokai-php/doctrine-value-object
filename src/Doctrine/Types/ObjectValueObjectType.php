@@ -7,6 +7,7 @@ namespace Yokai\DoctrineValueObject\Doctrine\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\ObjectValueObject;
 
@@ -30,7 +31,7 @@ final class ObjectValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -62,7 +63,12 @@ final class ObjectValueObjectType extends Type
         return $collection;
     }
 
-    private function getInheritedType(): JsonType
+    private static function getInheritedTypeName(): string
+    {
+        return Types::JSON;
+    }
+
+    private static function createInheritedType(): Type
     {
         return new JsonType();
     }

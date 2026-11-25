@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\DateTimeTzImmutableType;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Webmozart\Assert\Assert;
 use Yokai\DoctrineValueObject\DateTimeValueObject;
 
@@ -31,7 +32,7 @@ final class DateTimeValueObjectType extends Type
     /**
      * @inheritdoc
      */
-    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): mixed
     {
         if ($value === null) {
             return null;
@@ -63,7 +64,12 @@ final class DateTimeValueObjectType extends Type
         return $object;
     }
 
-    private function getInheritedType(): DateTimeTzImmutableType
+    private static function getInheritedTypeName(): string
+    {
+        return Types::DATETIMETZ_IMMUTABLE;
+    }
+
+    private static function createInheritedType(): Type
     {
         return new DateTimeTzImmutableType();
     }

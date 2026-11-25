@@ -53,6 +53,7 @@ use Yokai\DoctrineValueObject\Doctrine\Types;
 > If you still need the global type registry (e.g. with ORM < 3.8, which resolves types through it),
 > it is the default type provider of a fresh configuration:
 > `(new Configuration())->getTypeProvider()`.
+> This is only a transition: there will be no global type registry in DBAL 5.
 
 If you are using **Symfony**, you can register your value object types in the kernel construction.
 The connections that DoctrineBundle creates fall back to the global type registry.

@@ -23,8 +23,11 @@ Deprecation::enableWithPsrLogger(new class extends AbstractLogger {
             return;
         }
 
-        $vendor = \dirname(__DIR__) . '/vendor/';
-        $internals = [$vendor . 'doctrine/dbal/', $vendor . 'doctrine/deprecations/', $vendor . 'psr/log/', __FILE__];
+        $vendor = \realpath(\dirname(__DIR__) . '/vendor') . \DIRECTORY_SEPARATOR;
+        $internals = [__FILE__];
+        foreach (['doctrine/dbal', 'doctrine/deprecations', 'psr/log'] as $package) {
+            $internals[] = \realpath($vendor . $package) . \DIRECTORY_SEPARATOR;
+        }
         foreach (\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
             $file = $frame['file'] ?? '';
             if ($file === '') {
